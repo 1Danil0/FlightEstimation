@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flight</title>
+</head>
+<body>
+<h3>Conditions on route</h3>
+    <table th:object="${points}">
+        <tr>
+            <th>latitude</th>
+            <th>longitude</th>
+            <th>city</th>
+            <th>wind</th>
+            <th>wind direction</th>
+            <th>temperature</th>
+            <th>conditions</th>
+        </tr>
+        <tr th:each="point : ${points}">
+            <td th:text="${point.getPoint().getLat()}"></td>
+            <td th:text="${point.getPoint().getLon()}"></td>
+            <td th:text="${point.getName()}"></td>
+            <td th:text="${point.getWind_speed()}"></td>
+            <td th:text="${point.getWind_dir()}"></td>
+            <td th:text="${point.getTemp()}"></td>
+            <td th:text="${point.getCondition()}"></td>
+        </tr>
+    </table>
+</body>
+</html>

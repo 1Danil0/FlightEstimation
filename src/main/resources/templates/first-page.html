@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight</title>
+</head>
+<body>
+<form th:action="@{/login}" method="post">
+  <label for="username">Enter login</label>
+  <input type="text" name="username" id="username" placeholder="Enter login"/>
+  <br>
+  <label for="password">Enter password</label>
+  <input type="password" id="password" name="password" placeholder="Enter password">
+  <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <br>
+    <input type="submit" value="login">
+</form>
+
+<a th:href="@{/registration}">Have not you ever registrated?</a>
+<br>
+<a th:href="@{/points}">Continue without registration</a>
+</body>
+</html>

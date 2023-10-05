@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Flight</title>
+        <meta charset="UTF-8">
+
+    </head>
+    <body>
+    <h3>Введите пункты маршрута</h3>
+        <form method="post" th:action="@{/add}">
+            <label for="lat">enter latitude</label>
+            <input type="text" name="lat" id="lat"/>
+
+            <label for="lon">Enter longitude</label>
+            <input type="text" name="lon" id="lon"/>
+
+            <input type="submit" value="add"/>
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+        </form>
+    <div th:if="${!points.isEmpty()}">
+        <table th:object="${points}">
+            <tr>
+                <th>Lat</th>
+                <th>Lon</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="point : ${points}">
+                <td th:text="${point.getPoint().getLat()}"></td>
+                <td th:text="${point.getPoint().getLon()}"></td>
+                <td>
+                    <form th:action="@{/delete/{id}(id=${points.indexOf(point)})}" method="post">
+                        <input type="submit" value="delete">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <form th:if="${!points.isEmpty()}" method="get" th:action="@{/show}">
+        <input type="submit" value="Estimate"/>
+    </form>
+    </body>
+</html>
