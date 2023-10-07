@@ -1,12 +1,12 @@
 package com.danilermolenko.estimation.forFlights.entity;
 
-import com.danilermolenko.estimation.forFlights.points.WeatherInPoint;
 import jakarta.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -35,11 +35,8 @@ public class User implements UserDetails {
     @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> role;
-    @ElementCollection(targetClass = WeatherInPoint.class, fetch = FetchType.LAZY)
-    @CollectionTable(name = "users_route", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private List<WeatherInPoint> route;
-
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Route> routes;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role;
@@ -117,5 +114,31 @@ public class User implements UserDetails {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public List<Route> getRoutes() {
+        return routes;
+    }
+    public void addRoute(Route route){
+        if(this.routes == null){
+            routes = new ArrayList<>();
+        }
+        routes.add(route);
+        route.setUser(this);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", isActive=" + isActive +
+                ", role=" + role +
+                ", routes=" + routes +
+                '}';
     }
 }

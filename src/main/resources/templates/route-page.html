@@ -4,20 +4,22 @@
     <title>Flight</title>
 </head>
 <body>
-<h3>Conditions on route</h3>
-    <table th:object="${points}">
+<h3>Conditions on the specified route</h3>
+    <table th:object="${points}" border="1">
         <tr>
             <th>latitude</th>
             <th>longitude</th>
+            <th>altitude</th>
             <th>city</th>
-            <th>wind</th>
+            <th>wind, m/s</th>
             <th>wind direction</th>
             <th>temperature</th>
             <th>conditions</th>
         </tr>
         <tr th:each="point : ${points}">
-            <td th:text="${point.getPoint().getLat()}"></td>
-            <td th:text="${point.getPoint().getLon()}"></td>
+            <td th:text="${point.getPoint().getLatitude()}"></td>
+            <td th:text="${point.getPoint().getLongitude()}"></td>
+            <td th:text="${point.getPoint().getAltitude()}"></td>
             <td th:text="${point.getName()}"></td>
             <td th:text="${point.getWind_speed()}"></td>
             <td th:text="${point.getWind_dir()}"></td>
@@ -25,5 +27,6 @@
             <td th:text="${point.getCondition()}"></td>
         </tr>
     </table>
+<a th:href="@{/points}">back</a>
 </body>
 </html>

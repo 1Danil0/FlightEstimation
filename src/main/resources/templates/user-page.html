@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form method="post" th:action="@{/logout}">
+    <input type="submit" value="log out"/>
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+</form>
+<p th:text="${user.getName()}"></p>
+<a th:href="@{/points}">to previous page</a>
+<div th:if="${user.getRoutes() != null && !user.getRoutes().isEmpty()}">
+    <h3>Your routes</h3>
+    <table border="1">
+       <tr>
+           <th>Departure</th>
+<!--           <th th:each="point : ${route.getPoints()}">Point</th>-->
+           <th>Destination</th>
+<!--           <th th:each="alternative : ${route.getAlternatives()}">Alternative</th>-->
+       </tr>
+        <tr th:each="route : ${user.getRoutes()}">
+            <td th:text="${route.getDeparture()}"></td>
+            <td th:text="${route.getDestination()}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

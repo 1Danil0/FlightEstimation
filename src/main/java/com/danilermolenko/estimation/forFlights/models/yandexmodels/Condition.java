@@ -1,4 +1,4 @@
-package com.danilermolenko.estimation.forFlights.models;
+package com.danilermolenko.estimation.forFlights.models.yandexmodels;
 
 public class Condition {
     private int wind_dir;

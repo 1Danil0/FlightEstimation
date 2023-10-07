@@ -1,11 +1,11 @@
-package com.danilermolenko.estimation.forFlights.models;
+package com.danilermolenko.estimation.forFlights.models.yandexmodels;
 
 public class Weather {
     private long now;
     private String now_dt;
-    private Info info;
-    private Fact fact;
-    private Forecast forecast;
+    private com.danilermolenko.estimation.forFlights.models.yandexmodels.Info info;
+    private com.danilermolenko.estimation.forFlights.models.yandexmodels.Fact fact;
+    private com.danilermolenko.estimation.forFlights.models.yandexmodels.Forecast forecast;
     public Weather(){}
 
     public Weather(long now, String now_dt, Info info, Fact fact, Forecast forecast) {

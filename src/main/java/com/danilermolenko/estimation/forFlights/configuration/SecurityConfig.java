@@ -1,6 +1,7 @@
 package com.danilermolenko.estimation.forFlights.configuration;
 
 import com.danilermolenko.estimation.forFlights.service.UserSecurityService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,10 @@ public class SecurityConfig {
     public SecurityConfig(UserSecurityService userSecurityService) {
         this.userSecurityService = userSecurityService;
     }
-
+    @Bean
+    public Gson gson(){
+        return new Gson();
+    }
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(8);

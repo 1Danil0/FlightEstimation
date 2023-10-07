@@ -6,27 +6,133 @@
 
     </head>
     <body>
+    <div th:if="${user.getUsername() == null}">
+        <a th:href="@{/login}">login</a>
+    </div>
+    <div th:if="${user.getUsername() != null}">
+        <a th:href="@{/user/{id}(id=${user.getId()})}">to my page</a>
+    </div>
+    <hr>
+    <div style="color: red" th:if="errorDepAero">
+        <p th:text="${errorDepAero}"></p>
+    </div>
+    <form th:if="${departure == null}" method="post" th:action="@{/saveDepAero}">
+        <label for="departure">Enter ICAO code of departure aerodrome</label>
+        <br>
+        <input type="text" name="icao" id="departure" placeholder="Enter ICAO code of departure aerodrome"/>
+        <br>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <input type="submit" value="save"/>
+    </form>
+
+    <div th:if="${departure != null}">
+        <p>Departure Airport Information</p>
+        <table border="1">
+            <tr>
+                <td>Code</td>
+                <td>Wind Direction</td>
+                <td>Wind Speed, m/s</td>
+                <td>Ceiling, m</td>
+                <td>Visibility, m</td>
+            </tr>
+            <tr>
+                <th th:text="${departure.getIcao()}"></th>
+                <th th:text="${departure.getWindDirection()}"></th>
+                <th th:text="${departure.getWindSpeed()}"></th>
+                <th th:text="${departure.getCeilingMeters()}"></th>
+                <th th:text="${departure.getVisibilityMeters()}"></th>
+            </tr>
+        </table>
+    </div>
+<br>
+    <div style="color: red" th:if="errorDestAero">
+        <p th:text="${errorDestAero}"></p>
+    </div>
+    <form th:if="${departure != null && destination == null}" method="post" th:action="@{/saveDestAero}">
+        <label for="destination">Enter ICAO code of destination aerodrome</label>
+        <br>
+        <input type="text" name="icao" id="destination" placeholder="Enter ICAO code of destination aerodrome"/>
+        <br>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <input type="submit" value="save"/>
+    </form>
+<div th:if="${destination != null}">
+    <p>Destination Airport Information</p>
+    <table border="1">
+        <tr>
+            <td>Code</td>
+            <td>Wind Direction</td>
+            <td>Wind Speed, m/s</td>
+            <td>Ceiling, m</td>
+            <td>Visibility, m</td>
+        </tr>
+        <tr>
+            <th th:text="${destination.getIcao()}"></th>
+            <th th:text="${destination.getWindDirection()}"></th>
+            <th th:text="${destination.getWindSpeed()}"></th>
+            <th th:text="${destination.getCeilingMeters()}"></th>
+            <th th:text="${destination.getVisibilityMeters()}"></th>
+        </tr>
+    </table>
+    <br>
+</div>
+    <div style="color: red" th:if="errorAltnAero">
+        <p th:text="${errorAltnAero}"></p>
+    </div>
+    <form th:if="${departure != null && destination != null}" method="post" th:action="@{saveAlternative}">
+        <label for="alternative">Enter ICAO code of alternative aerodrome</label>
+        <br>
+        <input type="text" name="icao" id="alternative" placeholder="Enter ICAO code of alternative aerodrome"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <br>
+        <input type="submit" value="save"/>
+    </form>
+    <br>
+<div th:if="${alternatives != null && !alternatives.isEmpty()}">
+    <p>Alternatives Airport Information</p>
+    <table border="1">
+        <tr>
+            <td>Code</td>
+            <td>Wind Direction</td>
+            <td>Wind Speed, m/s</td>
+            <td>Ceiling, m</td>
+            <td>Visibility, m</td>
+        </tr>
+        <tr th:each="alternative : ${alternatives}">
+            <th th:text="${alternative.getIcao()}"></th>
+            <th th:text="${alternative.getWindDirection()}"></th>
+            <th th:text="${alternative.getWindSpeed()}"></th>
+            <th th:text="${alternative.getCeilingMeters()}"></th>
+            <th th:text="${alternative.getVisibilityMeters()}"></th>
+        </tr>
+    </table>
+</div>
     <h3>Введите пункты маршрута</h3>
         <form method="post" th:action="@{/add}">
             <label for="lat">enter latitude</label>
-            <input type="text" name="lat" id="lat"/>
+            <input type="text" name="latitude" id="lat"/>
 
             <label for="lon">Enter longitude</label>
-            <input type="text" name="lon" id="lon"/>
+            <input type="text" name="longitude" id="lon"/>
+
+            <label for="altit">Enter altitude</label>
+            <input type="int" name="altitude" id="altit"/>
 
             <input type="submit" value="add"/>
             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
         </form>
-    <div th:if="${!points.isEmpty()}">
-        <table th:object="${points}">
+    <div th:if="${points != null && !points.isEmpty()}">
+        <table th:object="${points}" border="1">
             <tr>
-                <th>Lat</th>
-                <th>Lon</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Altitude</th>
                 <th>Delete</th>
             </tr>
             <tr th:each="point : ${points}">
-                <td th:text="${point.getPoint().getLat()}"></td>
-                <td th:text="${point.getPoint().getLon()}"></td>
+                <td th:text="${point.getPoint().getLatitude()}"></td>
+                <td th:text="${point.getPoint().getLongitude()}"></td>
+                <td th:text="${point.getPoint().getAltitude()}"></td>
                 <td>
                     <form th:action="@{/delete/{id}(id=${points.indexOf(point)})}" method="post">
                         <input type="submit" value="delete">
@@ -35,7 +141,7 @@
             </tr>
         </table>
     </div>
-    <form th:if="${!points.isEmpty()}" method="get" th:action="@{/show}">
+    <form th:if="${points != null && !points.isEmpty()}" method="get" th:action="@{/show}">
         <input type="submit" value="Estimate"/>
     </form>
     </body>

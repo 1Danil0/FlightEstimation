@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -26,6 +27,13 @@ public class UserService {
         }
         return userDAO.findByLogin(principal.getName());
     }
+    public boolean save(User user){
+        if(user != null){
+            userDAO.save(user);
+            return true;
+        }
+        return false;
+    }
     public boolean save(UserDTO userDTO){
         if(userDAO.findByLogin(userDTO.getLogin()) == null){
             User user = new User();
@@ -40,5 +48,12 @@ public class UserService {
             return true;
         }
         return false;
+    }
+    public User findUserById(long id){
+        Optional<User> user = userDAO.findById(id);
+        if(user.isPresent()){
+            return user.get();
+        }
+        return null;
     }
 }
