@@ -4,6 +4,7 @@ import com.danilermolenko.estimation.forFlights.models.aeroweatcomm.AllWeather;
 import com.danilermolenko.estimation.forFlights.models.aeroweatcomm.Data;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,7 +20,9 @@ public class AeroWeatherComm {
     public AeroWeatherComm(Gson gson) {
         this.gson = gson;
     }
-    private static final String KEY = "d4329002797b4dac833e8548b5";
+
+    @Value("${AEROKEY}")
+    private static String KEY;
     private static final String URL = "https://api.checkwx.com/metar/";
     private static final String HEADER = "X-API-Key";
     private static final String SUFFIX = "/decoded";

@@ -1,32 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Flight</title>
+    <title>Flight Calculator</title>
 </head>
 <body>
+<h2>Flight Calculator</h2>
+<hr>
 <h3>Conditions on the specified route</h3>
-    <table th:object="${points}" border="1">
+Departure
+    <table border="1">
         <tr>
-            <th>latitude</th>
-            <th>longitude</th>
-            <th>altitude</th>
-            <th>city</th>
-            <th>wind, m/s</th>
-            <th>wind direction</th>
-            <th>temperature</th>
-            <th>conditions</th>
+            <th>Departure</th>
         </tr>
-        <tr th:each="point : ${points}">
-            <td th:text="${point.getPoint().getLatitude()}"></td>
-            <td th:text="${point.getPoint().getLongitude()}"></td>
-            <td th:text="${point.getPoint().getAltitude()}"></td>
-            <td th:text="${point.getName()}"></td>
-            <td th:text="${point.getWind_speed()}"></td>
-            <td th:text="${point.getWind_dir()}"></td>
-            <td th:text="${point.getTemp()}"></td>
-            <td th:text="${point.getCondition()}"></td>
+        <tr>
+            <td th:text="${route.getDeparture()}"></td>
         </tr>
     </table>
-<a th:href="@{/points}">back</a>
+<div th:if="${!route.getPoints().isEmpty()}">
+Points of route
+    <table border="1">
+        <tr>
+        <th>latitude</th>
+        <th>longitude</th>
+        <th>altitude</th>
+        </tr>
+        <tr th:each="point : ${route.getPoints()}">
+            <td th:text="${point.getLatitude()}"></td>
+            <td th:text="${point.getLongitude()}"></td>
+            <td th:text="${point.getAltitude()}"></td>
+        </tr>
+    </table>
+</div>
+Destination
+<table border="1">
+    <tr>
+        <th>Destination</th>
+    </tr>
+    <tr>
+        <td th:text="${route.getDestination()}"></td>
+    </tr>
+</table>
+<div th:if="${!route.getAlternatives().isEmpty()}">
+    Alternatives
+    <table border="1">
+        <tr>
+            <th>Alternative</th>
+        </tr>
+        <tr th:each="alternative : ${route.getAlternatives()}">
+            <td th:text="${alternative}"></td>
+        </tr>
+    </table>
+</div>
+<a th:href="@{/user/{id}(id=${route.getUser().getId()})}">back</a>
 </body>
 </html>

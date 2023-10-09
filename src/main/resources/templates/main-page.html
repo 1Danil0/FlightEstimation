@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Flight</title>
+        <title>Flight Calculator</title>
         <meta charset="UTF-8">
 
     </head>
     <body>
+    <h2>Flight Calculator</h2>
+    <hr>
     <div th:if="${user.getUsername() == null}">
         <a th:href="@{/login}">login</a>
     </div>
@@ -127,22 +129,29 @@
                 <th>Latitude</th>
                 <th>Longitude</th>
                 <th>Altitude</th>
+                <th>Wind dir</th>
+                <th>Wind speed, m/s</th>
+                <th>Conditions</th>
                 <th>Delete</th>
             </tr>
             <tr th:each="point : ${points}">
                 <td th:text="${point.getPoint().getLatitude()}"></td>
                 <td th:text="${point.getPoint().getLongitude()}"></td>
                 <td th:text="${point.getPoint().getAltitude()}"></td>
+                <td th:text="${point.getWind_dir()}"></td>
+                <td th:text="${point.getWind_speed()}"></td>
+                <td th:text="${point.getCondition()}"></td>
                 <td>
-                    <form th:action="@{/delete/{id}(id=${points.indexOf(point)})}" method="post">
+                    <form th:action="@{/delete/point/{id}(id=${points.indexOf(point)})}" method="post">
                         <input type="submit" value="delete">
                     </form>
                 </td>
             </tr>
         </table>
     </div>
-    <form th:if="${points != null && !points.isEmpty()}" method="get" th:action="@{/show}">
+    <form th:if="${points != null && !points.isEmpty() && destination != null && departure != null}" method="get" th:action="@{/calculate}">
         <input type="submit" value="Estimate"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
     </form>
     </body>
 </html>

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Flight</title>
+    <title>Flight Calculator</title>
     <meta charset="UTF-8">
 </head>
 <body>
+<h2>Flight Calculator</h2>
+<hr>
 <form method="post" th:action="@{/logout}">
     <input type="submit" value="log out"/>
     <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
@@ -19,10 +21,28 @@
 <!--           <th th:each="point : ${route.getPoints()}">Point</th>-->
            <th>Destination</th>
 <!--           <th th:each="alternative : ${route.getAlternatives()}">Alternative</th>-->
+           <th>Show route</th>
+           <th>Estimate</th>
+           <th>Delete</th>
        </tr>
         <tr th:each="route : ${user.getRoutes()}">
             <td th:text="${route.getDeparture()}"></td>
             <td th:text="${route.getDestination()}"></td>
+            <td>
+                <form method="get" th:action="@{/show/route/{id}(id=${user.getRoutes().indexOf(route)})}">
+                    <input type="submit" value="show"/>
+                </form>
+            </td>
+            <td>
+                <form method="get" th:action="@{/load/route/{id}(id=${user.getRoutes().indexOf(route)})}">
+                    <input type="submit" value="load"/>
+                </form>
+            </td>
+            <td>
+                <form method="get" th:action="@{/delete/route/{id}(id=${user.getRoutes().indexOf(route)})}">
+                    <input type="submit" value="delete"/>
+                </form>
+            </td>
         </tr>
     </table>
 </div>

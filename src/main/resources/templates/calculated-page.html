@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Calculator</title>
+</head>
+<body>
+<h2>Flight Calculator</h2>
+<hr>
+    <table border="1">
+        <tr>
+            <th>Пункт 1</th>
+            <th>Высота</th>
+            <th>Расстояние</th>
+            <th>ЗМПУ</th>
+            <th>ФМПУ</th>
+        </tr>
+        <tr>
+            <td th:text="${departure.getIcao()}"></td>
+            <td>0</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr th:each="point : ${points}">
+            <td th:text="${point.getPoint().getLatitude()}"></td>
+            <td th:text="${point.getPoint().getAltitude()}"></td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td th:text="${destination.getIcao()}"></td>
+            <td>0</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+    </table>
+    <form method="get" th:action="@{/correct}">
+        <input type="submit" value="Correct the route"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    </form>
+    <form method="get" th:action="@{/newRoute}">
+        <input type="submit" value="Create new route"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    </form>
+    <a th:href="@{/points}">back</a>
+</body>
+</html>

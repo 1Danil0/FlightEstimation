@@ -4,7 +4,9 @@ import com.danilermolenko.estimation.forFlights.weather.AirportWeather;
 import com.danilermolenko.estimation.forFlights.weather.WeatherInPoint;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class WeatherOnRoute {
     private AirportWeather departure;
@@ -41,7 +43,6 @@ public class WeatherOnRoute {
         }
         alternatives.add(airportWeather);
     }
-
     public List<WeatherInPoint> getPoints() {
         return points;
     }
@@ -52,4 +53,32 @@ public class WeatherOnRoute {
         }
         points.add(weatherInPoint);
     }
+    public void deletePoint(int id){
+        if(id < points.size()) {
+            points.remove(id);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "WeatherOnRoute{" +
+                "departure=" + departure +
+                ", destination=" + destination +
+                ", alternatives=" + alternatives +
+                ", points=" + points +
+                '}';
+    }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        WeatherOnRoute that = (WeatherOnRoute) o;
+//        return Objects.equals(departure, that.departure) && Objects.equals(destination, that.destination) && Objects.equals(alternatives, that.alternatives) && Objects.equals(points, that.points);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(departure, destination, alternatives, points);
+//    }
 }

@@ -3,6 +3,7 @@ package com.danilermolenko.estimation.forFlights.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "points")
@@ -17,8 +18,8 @@ public class Point {
     private String longitude;
     @Column(name = "altitude")
     private int altitude;
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "points")
-    private List<Route> routes;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Route route;
 
     public Point(String lat, String lon, int altitude) {
         this.latitude = lat;
@@ -56,8 +57,12 @@ public class Point {
         return id;
     }
 
-    public List<Route> getRoutes() {
-        return routes;
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
     }
 
     @Override
@@ -67,5 +72,18 @@ public class Point {
                 ", longitude='" + longitude + '\'' +
                 ", altitude=" + altitude +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point point = (Point) o;
+        return altitude == point.altitude && Objects.equals(latitude, point.latitude) && Objects.equals(longitude, point.longitude);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(latitude, longitude, altitude);
     }
 }

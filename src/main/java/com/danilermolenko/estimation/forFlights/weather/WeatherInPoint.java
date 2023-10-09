@@ -77,4 +77,16 @@ public class WeatherInPoint {
     public String getCondition() {
         return condition;
     }
+
+    @Override
+    public String toString() {
+        return "WeatherInPoint{" +
+                "point=" + point +
+                ", name='" + name + '\'' +
+                ", wind_dir='" + wind_dir + '\'' +
+                ", wind_speed=" + wind_speed +
+                ", temp=" + temp +
+                ", condition='" + condition + '\'' +
+                '}';
+    }
 }

@@ -64,4 +64,15 @@ public class AirportWeather {
     public String getVisibilityMeters() {
         return visibilityMeters;
     }
+
+    @Override
+    public String toString() {
+        return "AirportWeather{" +
+                "icao='" + icao + '\'' +
+                ", windDirection=" + windDirection +
+                ", windSpeed=" + windSpeed +
+                ", ceilingMeters=" + ceilingMeters +
+                ", visibilityMeters='" + visibilityMeters + '\'' +
+                '}';
+    }
 }

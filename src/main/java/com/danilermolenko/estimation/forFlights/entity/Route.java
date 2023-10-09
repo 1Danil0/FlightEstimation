@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "routes")
 public class Route {
@@ -13,20 +15,31 @@ public class Route {
     private long id;
     @Column(name = "departure")
     private String departure;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(name = "route_points",
-    joinColumns = @JoinColumn(name = "route_id"),
-    inverseJoinColumns = @JoinColumn(name = "point_id"))
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "route")
     private List<Point> points;
     @Column(name = "destination")
     private String destination;
     @ElementCollection
     @CollectionTable(name = "route_alternative", joinColumns = @JoinColumn(name = "route_id"))
     private List<String> alternatives;
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private User user;
 
     public Route() {
+    }
+    public static Route valueOf(WeatherOnRoute weather){
+        Route route = new Route();
+        route.setDeparture(weather.getDeparture().getIcao());
+        route.setDestination(weather.getDestination().getIcao());
+        if(weather.getPoints() != null) {
+            route.setPoints(weather.getPoints().stream().map(x -> x.getPoint())
+                    .toList());
+            route.getPoints().stream().forEach(point -> point.setRoute(route));
+        }
+        if(weather.getAlternatives() != null) {
+            route.setAlternative(weather.getAlternatives().stream().map(x -> x.getIcao()).toList());
+        }
+        return route;
     }
 
     public Route(String departure, List<Point> points, String destination, List<String> alternatives, User user) {
@@ -61,22 +74,16 @@ public class Route {
         this.departure = departure;
     }
 
-    public void addPoint(Point point) {
-        if(this.points == null){
-            this.points = new ArrayList<>();
-        }
-        this.points.add(point);
+    public void setPoints(List<Point> points) {
+        this.points = points;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public void addAlternative(String alternative) {
-        if(this.alternatives == null){
-            this.alternatives = new ArrayList<>();
-        }
-        this.alternatives.add(alternative);
+    public void setAlternative(List<String> alternatives) {
+        this.alternatives = alternatives;
     }
 
     public void setUser(User user) {
@@ -91,7 +98,34 @@ public class Route {
                 ", points=" + points +
                 ", destination='" + destination + '\'' +
                 ", alternatives=" + alternatives +
-                ", user=" + user +
                 '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Route route = (Route) o;
+        if(this.alternatives.size() != route.alternatives.size()){
+            return false;
+        }
+        if(this.points.size() != route.points.size()){
+            return false;
+        }
+        for(int i = 0; i < this.alternatives.size(); i++){
+            if(!this.alternatives.get(i).equals(route.alternatives.get(i))){
+               return false;
+            }
+        }
+        for(int i = 0; i < this.points.size(); i++){
+            if(!this.points.get(i).equals(route.points.get(i))){
+                return false;
+            }
+        }
+        return this.departure.equals(route.departure) && this.destination.equals(route.destination);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(departure, points, destination, alternatives);
     }
 }
