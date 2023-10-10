@@ -31,7 +31,7 @@ public class WeatherReceiver implements RouteWeatherGetable {
                 airportWeather = new AirportWeather.Builder()
                         .icao(allWeather.getData()[0].getIcao())
                         .windDirection(allWeather.getData()[0].getWind() == null ? 0 : allWeather.getData()[0].getWind().getDegrees())
-                        .windSpeed(allWeather.getData()[0].getWind() == null ? 0 : allWeather.getData()[0].getWind().getSpeed_mph())
+                        .windSpeed(allWeather.getData()[0].getWind() == null ? 0 : allWeather.getData()[0].getWind().getSpeed_mps())
                         .ceilingMeters(allWeather.getData()[0].getCeiling() != null ? allWeather.getData()[0].getCeiling().getMeters() : 10000)
                         .visibilityMeters(allWeather.getData()[0].getVisibility() != null ? allWeather.getData()[0].getVisibility().getMeters() : "10000+")
                         .build();

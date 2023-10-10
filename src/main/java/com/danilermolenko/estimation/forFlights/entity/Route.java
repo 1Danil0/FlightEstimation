@@ -31,13 +31,15 @@ public class Route {
         Route route = new Route();
         route.setDeparture(weather.getDeparture().getIcao());
         route.setDestination(weather.getDestination().getIcao());
+        route.setPoints(new ArrayList<>());
         if(weather.getPoints() != null) {
             route.setPoints(weather.getPoints().stream().map(x -> x.getPoint())
                     .toList());
             route.getPoints().stream().forEach(point -> point.setRoute(route));
         }
+        route.setAlternatives(new ArrayList<>());
         if(weather.getAlternatives() != null) {
-            route.setAlternative(weather.getAlternatives().stream().map(x -> x.getIcao()).toList());
+            route.setAlternatives(weather.getAlternatives().stream().map(x -> x.getIcao()).toList());
         }
         return route;
     }
@@ -55,6 +57,9 @@ public class Route {
     }
 
     public List<Point> getPoints() {
+        if(points == null){
+            return new ArrayList<>();
+        }
         return points;
     }
 
@@ -63,6 +68,9 @@ public class Route {
     }
 
     public List<String> getAlternatives() {
+        if(alternatives == null){
+            return new ArrayList<>();
+        }
         return alternatives;
     }
 
@@ -82,12 +90,16 @@ public class Route {
         this.destination = destination;
     }
 
-    public void setAlternative(List<String> alternatives) {
+    public void setAlternatives(List<String> alternatives) {
         this.alternatives = alternatives;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override
@@ -100,29 +112,51 @@ public class Route {
                 ", alternatives=" + alternatives +
                 '}';
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Route route = (Route) o;
-        if(this.alternatives.size() != route.alternatives.size()){
-            return false;
-        }
-        if(this.points.size() != route.points.size()){
-            return false;
-        }
-        for(int i = 0; i < this.alternatives.size(); i++){
-            if(!this.alternatives.get(i).equals(route.alternatives.get(i))){
-               return false;
-            }
-        }
-        for(int i = 0; i < this.points.size(); i++){
-            if(!this.points.get(i).equals(route.points.get(i))){
-                return false;
-            }
-        }
-        return this.departure.equals(route.departure) && this.destination.equals(route.destination);
+        return Objects.equals(departure, route.departure)
+                && Objects.equals(points, route.points)
+                && Objects.equals(destination, route.destination)
+                && Objects.equals(alternatives, route.alternatives);
     }
+    //    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Route route = (Route) o;
+//        if((this.alternatives == null && route.alternatives != null) ||
+//                (this.alternatives != null && route.alternatives == null)){
+//            return false;
+//        }
+//        if(this.alternatives != null && route.alternatives != null &&
+//                this.alternatives.size() != route.alternatives.size()){
+//            return false;
+//        }
+//        if(this.points.size() != route.points.size()){
+//            return false;
+//        }
+//        for(int i = 0; i < this.alternatives.size(); i++){
+//            if(!this.alternatives.get(i).equals(route.alternatives.get(i))){
+//               return false;
+//            }
+//        }
+//        for(int i = 0; i < this.points.size(); i++){
+//            if(!this.points.get(i).getLatitude().equals(route.points.get(i).getLatitude())){
+//                return false;
+//            }
+//            if(!this.points.get(i).getLongitude().equals(route.points.get(i).getLongitude())){
+//                return false;
+//            }
+//            if(this.points.get(i).getAltitude() != (route.points.get(i).getAltitude())){
+//                return false;
+//            }
+//        }
+//        return this.departure.equals(route.departure) && this.destination.equals(route.destination);
+//    }
 
     @Override
     public int hashCode() {

@@ -21,4 +21,7 @@ public class RouteService {
     public void deleteById(long id){
         routeDAO.deleteById(id);
     }
+    public void delete(Route route){
+        routeDAO.delete(route);
+    }
 }

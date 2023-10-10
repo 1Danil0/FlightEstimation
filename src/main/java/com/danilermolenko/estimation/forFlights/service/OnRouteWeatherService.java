@@ -1,6 +1,7 @@
 package com.danilermolenko.estimation.forFlights.service;
 
 import com.danilermolenko.estimation.forFlights.communication.WeatherReceiver;
+import com.danilermolenko.estimation.forFlights.dto.PointDTO;
 import com.danilermolenko.estimation.forFlights.entity.Point;
 import com.danilermolenko.estimation.forFlights.entity.Route;
 import com.danilermolenko.estimation.forFlights.entity.WeatherOnRoute;
@@ -9,6 +10,7 @@ import com.danilermolenko.estimation.forFlights.weather.WeatherInPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -87,6 +89,8 @@ public class OnRouteWeatherService {
         weatherOnRoute = new WeatherOnRoute();
         weatherOnRoute.setDeparture(weatherReceiver.getAirportWeather(route.getDeparture()));
         weatherOnRoute.setDestination(weatherReceiver.getAirportWeather(route.getDestination()));
+        weatherOnRoute.setAlternatives(new ArrayList<>());
+        weatherOnRoute.setPoints(new ArrayList<>());
         Iterator<String> alternatives = route.getAlternatives().iterator();
         while (alternatives.hasNext()){
             weatherOnRoute.addAlternative(weatherReceiver.getAirportWeather(alternatives.next()));

@@ -75,4 +75,28 @@ public class UserService {
         userDAO.save(user);
         return true;
     }
+    public User findByEmail(String email){
+        User user = userDAO.findByEmail(email);
+        return user;
+    }
+    public boolean changePassword(String email){
+        User user = userDAO.findByEmail(email);
+        if(user != null) {
+            user.setActivationCode(UUID.randomUUID().toString());
+            userDAO.save(user);
+            String message = String.format("Hi, %s!\nTo change the password you have to go through this link: http://localhost:8080/changePassword/step3/%s"
+                    , user.getUsername(), user.getActivationCode());
+            mailSender.sent(email, "change password", message);
+            return true;
+        }
+        return false;
+    }
+    public void changePassword(String pass, String code){
+        User user = userDAO.findByActivationCode(code);
+        if(user != null){
+            user.setPassword(passwordEncoder.encode(pass));
+            user.setActivationCode(null);
+            userDAO.save(user);
+        }
+    }
 }

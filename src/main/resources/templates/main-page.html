@@ -109,7 +109,11 @@
         </tr>
     </table>
 </div>
+
     <h3>Введите пункты маршрута</h3>
+    <div style="color: red" th:if="pointError">
+        <p th:text="${pointError}"></p>
+    </div>
         <form method="post" th:action="@{/add}">
             <label for="lat">enter latitude</label>
             <input type="text" name="latitude" id="lat"/>

@@ -125,6 +125,9 @@ public class User implements UserDetails {
     }
 
     public List<Route> getRoutes() {
+        if(routes == null){
+            return new ArrayList<>();
+        }
         return routes;
     }
     public void addRoute(Route route){

@@ -36,7 +36,12 @@ public class WeatherOnRoute {
     public List<AirportWeather> getAlternatives() {
         return alternatives;
     }
-
+    public void setAlternatives(List<AirportWeather> alternatives){
+        this.alternatives = alternatives;
+    }
+    public void setPoints(List<WeatherInPoint> points){
+        this.points = points;
+    }
     public void addAlternative(AirportWeather airportWeather) {
         if(alternatives == null){
             alternatives = new ArrayList<>();

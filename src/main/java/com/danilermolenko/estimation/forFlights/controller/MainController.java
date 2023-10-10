@@ -1,6 +1,7 @@
 package com.danilermolenko.estimation.forFlights.controller;
 
 import com.danilermolenko.estimation.forFlights.dto.AirportWeatherDTO;
+import com.danilermolenko.estimation.forFlights.dto.PointDTO;
 import com.danilermolenko.estimation.forFlights.entity.Point;
 import com.danilermolenko.estimation.forFlights.entity.Route;
 import com.danilermolenko.estimation.forFlights.entity.User;
@@ -67,7 +68,14 @@ public class MainController {
         return "main-page";
     }
     @PostMapping("/add")
-    public String addPoint(Point point) {
+    public String addPoint(Point point, Model model, Principal principal) {
+        double lat = Double.parseDouble(point.getLatitude());
+        double lon = Double.parseDouble(point.getLongitude());
+        if(lat < -90 || lat > 90 || lon < -180 || lon > 180){
+            model.addAttribute("pointError", "Введите корректные координаты");
+            setVariables(model, principal);
+            return "main-page";
+        }
         onRouteWeatherService.addPoint(point);
         return "redirect:/points";
     }
@@ -80,7 +88,7 @@ public class MainController {
     public String estimate(Model model, Principal principal){
         User user = userService.getUserFromPrincipal(principal);
         Route route = Route.valueOf(onRouteWeatherService.getWeatherOnRoute());
-        if(user.getUsername() != null && !user.getRoutes().contains(route)) {
+        if(user.getUsername() != null && !user.getRoutes().contains(route)){
             user.addRoute(route);
             userService.save(user);
         }
@@ -100,6 +108,8 @@ public class MainController {
     public String estimate(@PathVariable("id") int id, Principal principal){
         User user = userService.getUserFromPrincipal(principal);
         onRouteWeatherService.convertRouteToWeatherOnRoute(user.getRoutes().get(id));
+        System.out.println(user.getRoutes().get(id));
+        System.out.println(onRouteWeatherService.getWeatherOnRoute());
         return "redirect:/points";
     }
     @GetMapping("/show/route/{id}")
@@ -111,9 +121,11 @@ public class MainController {
     @GetMapping("/delete/route/{id}")
     public String deleteRoute(@PathVariable("id") int id, Principal principal){
         User user = userService.getUserFromPrincipal(principal);
+        Route route = user.getRoutes().get(id);
         user.getRoutes().remove(id);
-        routeService.deleteById(id);
+        route.setUser(null);
+        routeService.deleteById(route.getId());
         userService.save(user);
-        return "redirect:/user/{id}";
+        return "redirect:/user/" + user.getId();
     }
 }
