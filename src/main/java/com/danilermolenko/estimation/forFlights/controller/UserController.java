@@ -46,4 +46,13 @@ public class UserController {
         }
         return "redirect:/points";
     }
+    @GetMapping("/activate/{code}")
+    public String activate(@PathVariable("code") String code, Model model){
+        if(service.activateUser(code)){
+            model.addAttribute("message", "you have been activated");
+        } else{
+            model.addAttribute("message", "you have not been activated");
+        }
+        return "first-page";
+    }
 }

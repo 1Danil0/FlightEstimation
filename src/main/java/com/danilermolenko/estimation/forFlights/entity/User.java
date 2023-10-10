@@ -22,6 +22,8 @@ public class User implements UserDetails {
     private String surname;
     @Column(name = "email", unique = true)
     private String email;
+    @Column(name = "active_code")
+    private String activationCode;
     @Column(unique = true, name = "login")
     private String login;
     @Column(name = "password")
@@ -34,6 +36,7 @@ public class User implements UserDetails {
     private Set<Role> role;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<Route> routes;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role;
@@ -111,6 +114,14 @@ public class User implements UserDetails {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 
     public List<Route> getRoutes() {

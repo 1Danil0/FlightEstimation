@@ -21,10 +21,6 @@ public class SecurityConfig {
         this.userSecurityService = userSecurityService;
     }
     @Bean
-    public Gson gson(){
-        return new Gson();
-    }
-    @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(8);
     }

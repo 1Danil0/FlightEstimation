@@ -7,6 +7,9 @@
 <body>
 <h2>Flight Calculator</h2>
 <hr>
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
 <form th:action="@{/login}" method="post">
   <label for="username">Enter login</label>
   <input type="text" name="username" id="username" placeholder="Enter login"/>
