@@ -22,7 +22,7 @@ public class YandexComm {
         this.gson = gson;
     }
     private static final String HEADER = "X-Yandex-API-Key";
-    private static  String KEY = "0bd5a0ad-b6d5-40c2-86ab-bebcf07940b0";
+    private static  String KEY = "key";
 
     private HttpRequest getHttpRequest(String lat, String lon) throws URISyntaxException {
         String url = "https://api.weather.yandex.ru/v2/informers?" + "lat=" + lat + "&lon=" + lon;

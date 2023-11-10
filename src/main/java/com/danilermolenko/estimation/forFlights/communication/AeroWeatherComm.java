@@ -21,7 +21,7 @@ public class AeroWeatherComm {
         this.gson = gson;
     }
 
-    private static String KEY = "d4329002797b4dac833e8548b5";
+    private static String KEY = "key";
     private static final String URL = "https://api.checkwx.com/metar/";
     private static final String HEADER = "X-API-Key";
     private static final String SUFFIX = "/decoded";

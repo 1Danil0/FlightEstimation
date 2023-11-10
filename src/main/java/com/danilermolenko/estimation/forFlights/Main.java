@@ -1,5 +1,6 @@
 package com.danilermolenko.estimation.forFlights;
 
+import com.danilermolenko.estimation.forFlights.calculator.Calculator;
 import com.danilermolenko.estimation.forFlights.communication.AeroWeatherComm;
 import com.danilermolenko.estimation.forFlights.entity.Point;
 import com.danilermolenko.estimation.forFlights.entity.Route;
@@ -16,20 +17,22 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException{
+//        Calculator calculator = new Calculator();
+//        System.out.println(calculator.findDistance(0, 0, 2, 2));
 
-        Route route1 = new Route();
-        route1.setDeparture("UWKE");
-        route1.setDestination("UUEE");
-        route1.setAlternatives(List.of("ULLI"));
-        route1.setPoints(List.of(new Point("1", "1" ,1 )));
-
-        Route route2 = new Route();
-        route2.setDeparture("UWKE");
-        route2.setDestination("UUEE");
-        route2.setAlternatives(List.of("ULLI"));
-        route2.setPoints(List.of(new Point("1", "1" ,1 )));
-
-        System.out.println(route2.equals(route1));
+//        Route route1 = new Route();
+//        route1.setDeparture("UWKE");
+//        route1.setDestination("UUEE");
+//        route1.setAlternatives(List.of("ULLI"));
+//        route1.setPoints(List.of(new Point("1", "1" ,1 )));
+//
+//        Route route2 = new Route();
+//        route2.setDeparture("UWKE");
+//        route2.setDestination("UUEE");
+//        route2.setAlternatives(List.of("ULLI"));
+//        route2.setPoints(List.of(new Point("1", "1" ,1 )));
+//
+//        System.out.println(route2.equals(route1));
 
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.println("Enter code of aerodrom: ");
@@ -37,23 +40,23 @@ public class Main {
 //        scanner.close();
 //
 //
-//        Gson gson = new Gson();
-//        AeroWeatherComm aeroWeatherComm = new AeroWeatherComm(gson);
+        Gson gson = new Gson();
+        AeroWeatherComm aeroWeatherComm = new AeroWeatherComm(gson);
 
-//        Data[] data = null;
-//        AllWeather allWeather = null;
-//
-//        try {
-//            allWeather= aeroWeatherComm.getAllWeather(code);
-//            System.out.println(allWeather.getData()[0].getIcao());
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//        System.out.println(allWeather);
+        Data[] data = null;
+        AllWeather allWeather = null;
+
+        try {
+            allWeather= aeroWeatherComm.getAllWeather("UWKE");
+            System.out.println(allWeather.getData()[0].getIcao());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(allWeather);
 
 //        OkHttpClient httpClient = new OkHttpClient().newBuilder().build();
 //        MediaType mediaType = MediaType.parse("application/json");

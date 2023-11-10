@@ -1,8 +1,11 @@
 package com.danilermolenko.estimation.forFlights.entity;
 
+import com.danilermolenko.estimation.forFlights.weather.AirportWeather;
+import com.danilermolenko.estimation.forFlights.weather.WeatherInPoint;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,13 +36,19 @@ public class Route {
         route.setDestination(weather.getDestination().getIcao());
         route.setPoints(new ArrayList<>());
         if(weather.getPoints() != null) {
-            route.setPoints(weather.getPoints().stream().map(x -> x.getPoint())
-                    .toList());
-            route.getPoints().stream().forEach(point -> point.setRoute(route));
+            Iterator<WeatherInPoint> points = weather.getPoints().iterator();
+            while (points.hasNext()){
+                Point point = points.next().getPoint();
+                route.addPoint(new Point(point.getLatitude(), point.getLongitude(), point.getAltitude()));
+            }
         }
         route.setAlternatives(new ArrayList<>());
         if(weather.getAlternatives() != null) {
-            route.setAlternatives(weather.getAlternatives().stream().map(x -> x.getIcao()).toList());
+            Iterator<AirportWeather> alternatives = weather.getAlternatives().iterator();
+            while (alternatives.hasNext()){
+                String alternative = alternatives.next().getIcao();
+                route.addAlternative(alternative);
+            }
         }
         return route;
     }
@@ -101,6 +110,19 @@ public class Route {
     public long getId() {
         return id;
     }
+    public void addPoint(Point point){
+        if(points == null){
+            points = new ArrayList<>();
+        }
+        points.add(point);
+        point.setRoute(this);
+    }
+    public void addAlternative(String alternative){
+        if(alternatives == null){
+            alternatives = new ArrayList<>();
+        }
+        alternatives.add(alternative);
+    }
 
     @Override
     public String toString() {
@@ -123,41 +145,6 @@ public class Route {
                 && Objects.equals(destination, route.destination)
                 && Objects.equals(alternatives, route.alternatives);
     }
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Route route = (Route) o;
-//        if((this.alternatives == null && route.alternatives != null) ||
-//                (this.alternatives != null && route.alternatives == null)){
-//            return false;
-//        }
-//        if(this.alternatives != null && route.alternatives != null &&
-//                this.alternatives.size() != route.alternatives.size()){
-//            return false;
-//        }
-//        if(this.points.size() != route.points.size()){
-//            return false;
-//        }
-//        for(int i = 0; i < this.alternatives.size(); i++){
-//            if(!this.alternatives.get(i).equals(route.alternatives.get(i))){
-//               return false;
-//            }
-//        }
-//        for(int i = 0; i < this.points.size(); i++){
-//            if(!this.points.get(i).getLatitude().equals(route.points.get(i).getLatitude())){
-//                return false;
-//            }
-//            if(!this.points.get(i).getLongitude().equals(route.points.get(i).getLongitude())){
-//                return false;
-//            }
-//            if(this.points.get(i).getAltitude() != (route.points.get(i).getAltitude())){
-//                return false;
-//            }
-//        }
-//        return this.departure.equals(route.departure) && this.destination.equals(route.destination);
-//    }
-
     @Override
     public int hashCode() {
         return Objects.hash(departure, points, destination, alternatives);
